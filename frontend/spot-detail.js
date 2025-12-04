@@ -58,8 +58,7 @@ async function loadSpotDetails() {
             const hasHalfStar = spot.avg_rating % 1 >= 0.5;
             const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
             const starsHtml = '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
-            const avgRatingDisplay = Number(spot.avg_rating).toFixed(1);
-            const ratingText = spot.review_count > 0 ? `${starsHtml} ${avgRatingDisplay} (${spot.review_count}件のレビュー)` : '評価なし';
+            const ratingText = spot.review_count > 0 ? `${starsHtml} ${spot.avg_rating.toFixed(1)} (${spot.review_count}件のレビュー)` : '評価なし';
             document.getElementById('spotRating').textContent = ratingText;
 
             // 画像を表示
