@@ -30,10 +30,15 @@ class EventRepository:
             return []
 
         try:
+            try:
+                month_int = int(month)
+            except ValueError:
+                raise ValueError('月は数字で指定してください。')
+            if month_int < 1 or month_int > 12:
+                raise ValueError('月は1から12の範囲で指定してください')
             cursor = conn.cursor()
-            # 月の範囲チェックがない（13月なども受け付ける）
-            # 月の形式は "01", "02", ... "12"
-            month_str = f'{int(month):02d}'
+
+            month_str = f'{month_int:02d}'
             cursor.execute('''
                 SELECT * FROM events
                 WHERE substr(event_date, 6, 2) = ?
@@ -43,7 +48,7 @@ class EventRepository:
             return events
         except Exception as e:
             print(f"月別イベント取得エラー: {e}")
-            return []
+            return {"error": str(e)}
         finally:
             close_db(conn)
 
